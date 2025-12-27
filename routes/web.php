@@ -40,3 +40,4 @@ Route::middleware('auth')->group(function () {
 });
 
 
+// Test route to check authentication status

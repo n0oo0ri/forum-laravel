@@ -37,54 +37,88 @@
 
     <!-- HEADER -->
     <header class="sticky top-0 z-50 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
-        <div class="relative w-full py-3">
+        <div class="w-full px-4 md:px-6 py-3">
 
-            <!-- LEFT & RIGHT -->
-            <div class="flex items-center justify-between px-6">
-                <a href="{{ route('home') }}" class="text-2xl font-bold">Forum</a>
+            <!-- GRID HEADER -->
+            <div class="grid grid-cols-3 items-center gap-4">
 
-                <div class="flex items-center gap-4">
+                <!-- LEFT -->
+                <div class="flex justify-start">
+                    <a href="{{ route('home') }}" class="text-2xl font-bold whitespace-nowrap">
+                        Forum
+                    </a>
+                </div>
+
+
+                <!-- CENTER (SEARCH) -->
+                <div class="flex justify-center">
+                    <form action="{{ route('home') }}" method="GET" class="hidden md:block">
+                        <div class="relative max-w-xl mx-auto">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg>
+
+                            <input type="text" name="q" value="{{ request('q') }}"
+                                placeholder="Cari postingan..."
+                                class="w-full rounded-full pl-10 pr-4 py-2 text-sm
+                               border border-slate-300 dark:border-slate-600
+                               bg-slate-100 dark:bg-slate-800
+                               focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- RIGHT -->
+                <div class="flex items-center gap-3 justify-end">
                     @auth
+                        <!-- CREATE POST -->
                         <button onclick="openCreatePostModal()"
-                            class="text-sm px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold">
-                            + Buat
+                            class="flex items-center gap-1
+               p-2 lg:px-3 lg:py-1
+               bg-blue-600 hover:bg-blue-700
+               text-white rounded-full lg:rounded
+               transition"
+                            aria-label="Buat postingan">
+
+                            <!-- ICON (selalu tampil) -->
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                            </svg>
                         </button>
 
-                        <a href="{{ route('users.profile', auth()->user()) }}"
-                            class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                        <a href="{{ route('users.profile', auth()->user()) }}" class="flex items-center gap-2">
                             @if (auth()->user()->avatar)
-                                <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}"
-                                    class="w-8 h-8 rounded-full object-cover">
+                                <img src="{{ asset('storage/' . auth()->user()->avatar) }}"
+                                    class="w-8 h-8 rounded-full object-cover shrink-0">
                             @else
                                 <div
-                                    class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
+                                    class="w-8 h-8 rounded-full bg-blue-600 text-white
+                                       flex items-center justify-center text-xs font-bold">
                                     {{ substr(auth()->user()->name, 0, 1) }}
                                 </div>
                             @endif
-                            <span class="text-sm text-slate-600 dark:text-slate-400 hover:underline">
+
+                            <!-- Nama hanya desktop -->
+                            <span class="hidden lg:inline text-sm text-slate-600 dark:text-slate-400">
                                 {{ auth()->user()->name }}
                             </span>
                         </a>
-
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button class="text-sm font-semibold hover:underline">Keluar</button>
-                        </form>
                     @else
                         <a href="{{ route('login') }}" class="text-sm font-semibold hover:underline">Masuk</a>
                         <a href="{{ route('register') }}" class="text-sm font-semibold hover:underline">Daftar</a>
                     @endauth
 
-                    <!-- THEME TOGGLE (SVG) -->
-                    <button id="theme-toggle" aria-label="Toggle dark mode"
-                        class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800
-                           hover:bg-slate-200 dark:hover:bg-slate-700
-                           transition-colors">
+                    <!-- THEME TOGGLE -->
+                    <button id="theme-toggle"
+                        class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                         <!-- Moon -->
                         <svg class="w-5 h-5 text-slate-700 dark:hidden" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3
-                               7 7 0 0021 12.79z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
                         </svg>
 
                         <!-- Sun -->
@@ -99,24 +133,21 @@
                 </div>
             </div>
 
-            <!-- CENTER SEARCH -->
-            <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
-                <form action="{{ route('home') }}" method="GET" class="w-full max-w-xl pointer-events-auto px-4">
+            <!-- SEARCH MOBILE -->
+            <div class="md:hidden mt-3">
+                <form action="{{ route('home') }}" method="GET">
                     <div class="relative">
-                        <!-- Search Icon -->
-                        <svg class="absolute inset-y-0 left-3 my-auto w-4 h-4 text-slate-400"
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                             stroke-width="2">
                             <circle cx="11" cy="11" r="8" />
                             <line x1="21" y1="21" x2="16.65" y2="16.65" />
                         </svg>
 
-                        <input type="text" name="q" value="{{ request('q') }}"
-                            placeholder="Cari postingan..."
+                        <input type="text" name="q" placeholder="Cari postingan..."
                             class="w-full rounded-full pl-10 pr-4 py-2 text-sm
                                border border-slate-300 dark:border-slate-600
-                               bg-slate-100 dark:bg-slate-800
-                               focus:outline-none focus:ring-2 focus:ring-primary">
+                               bg-slate-100 dark:bg-slate-800">
                     </div>
                 </form>
             </div>
@@ -124,32 +155,61 @@
         </div>
     </header>
 
-
     <!-- MAIN -->
     <main class="max-w-3xl mx-auto px-6 py-8">
-        <div class="mb-8 flex items-center justify-between gap-4">
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+            <!-- TITLE -->
             <div>
                 @if (request('q'))
-                    <h2 class="text-4xl font-bold mb-2">Hasil Pencarian: "{{ request('q') }}"</h2>
-                    <p class="text-slate-600 dark:text-slate-400">
+                    <h2 class="text-2xl sm:text-4xl font-bold mb-1 sm:mb-2">
+                        Hasil Pencarian: "{{ request('q') }}"
+                    </h2>
+                    <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
                         Ditemukan {{ $posts->total() }} hasil
                     </p>
                 @else
-                    <h2 class="text-4xl font-bold mb-2">Selamat Datang di Forum</h2>
-                    <p class="text-slate-600 dark:text-slate-400">
+                    <h2 class="text-2xl sm:text-4xl font-bold mb-1 sm:mb-2">
+                        Selamat Datang di Forum
+                    </h2>
+                    <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
                         Berbagi pengetahuan dan diskusi dengan komunitas
                     </p>
                 @endif
             </div>
-            <select id="sortPosts" onchange="sortPostsHandler(this.value)"
-                class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 h-fit">
-                <option value="">Urutkan...</option>
-                <option value="newest">Recent</option>
-                <option value="oldest">Oldest</option>
-                <option value="votes_high">Most Votes</option>
-                <option value="votes_low">Least Votes</option>
-            </select>
+
+            <!-- SORT -->
+            <div class="w-full sm:w-auto sm:min-w-[220px]">
+                <div class="relative">
+                    <!-- ICON -->
+                    <svg class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2
+                        w-4 h-4 text-slate-400"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M7 8h10M10 12h4M13 16h-2" />
+                    </svg>
+
+                    <select id="sortPosts" onchange="sortPostsHandler(this.value)"
+                        class="w-full sm:w-auto
+                       appearance-none
+                       pl-10 pr-10 py-2
+                       text-sm
+                       border border-slate-300 dark:border-slate-600
+                       rounded-lg
+                       bg-white dark:bg-slate-800
+                       text-slate-900 dark:text-white
+                       focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                        <option value="">Urutkan postingan</option>
+                        <option value="newest">Terbaru</option>
+                        <option value="oldest">Terlama</option>
+                        <option value="votes_high">Vote Terbanyak</option>
+                        <option value="votes_low">Vote Terendah</option>
+                    </select>
+                </div>
+            </div>
         </div>
+
 
         <!-- POSTS -->
         <div class="space-y-6" data-posts-container>
@@ -606,19 +666,19 @@
             } else if (type === 'video') {
                 videoSource.src = src;
                 video.load();
-                // PENTING: Remove hidden SEBELUM play
                 video.classList.remove('hidden');
 
-                // Tunggu video ready sebelum play
-                video.addEventListener('loadeddata', function playOnce() {
+                // autoplay tanpa event listener
+                setTimeout(() => {
                     video.play().catch(err => console.error('Video play error:', err));
-                    video.removeEventListener('loadeddata', playOnce);
-                });
+                }, 50);
             }
 
             // Show modal dengan transition
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            modal.classList.add('opacity-100');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+            }, 10);
 
             document.body.style.overflow = 'hidden';
         }
@@ -626,25 +686,28 @@
         function closeLightbox() {
             const modal = document.getElementById('lightboxModal');
             const video = document.getElementById('lightboxVideo');
+            const videoSource = video.querySelector('source');
 
             modal.classList.add('opacity-0', 'pointer-events-none');
-            modal.classList.remove('opacity-100');
             setTimeout(() => {
+                modal.style.display = 'none';
                 video.pause();
-                video.src = '';
+                if (videoSource) {
+                    videoSource.src = '';
+                }
             }, 300);
 
             document.body.style.overflow = 'auto';
         }
 
-        // Close lightbox when clicking outside content
+        // Close lightbox ketika klik di luar
         document.getElementById('lightboxModal')?.addEventListener('click', (e) => {
             if (e.target === document.getElementById('lightboxModal')) {
                 closeLightbox();
             }
         });
 
-        // Close lightbox with Escape key
+        // Close lightbox dengan tombol Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeLightbox();

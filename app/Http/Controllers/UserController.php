@@ -49,7 +49,12 @@ class UserController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => [
+        'required',
+        'string',
+        'max:255',
+        'regex:/^\S+$/'
+    ],
             'email' => 'required|email|unique:users,email,' . $user->id,
             'bio' => 'nullable|string|max:500',
             'location' => 'nullable|string|max:255',

@@ -140,7 +140,9 @@
 
                     <div id="media-preview" class="hidden mt-4">
                         <img id="preview-img" class="max-h-64 mx-auto rounded-lg hidden" />
-                        <video id="preview-video" class="max-h-64 mx-auto rounded-lg hidden" controls />
+                        <video id="preview-video" class="max-h-64 mx-auto rounded-lg hidden" controls playsinline
+                            preload="metadata">
+                        </video>
                         <div id="media-filename" class="text-sm text-slate-600 dark:text-slate-400 mt-2">
                         </div>
                         <button type="button" onclick="clearMedia()"
@@ -169,71 +171,63 @@
     </main>
 
     <script>
-        document.getElementById('theme-toggle')?.addEventListener('click', () => {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('dark-mode', isDark);
-            document.querySelector('#theme-toggle span').textContent = isDark ? '☀️' : '🌙';
-        });
+        const mediaDropZone = document.getElementById('media-drop-zone');
+        const mediaInput = document.getElementById('media');
 
-        // Set initial emoji
-        if (document.documentElement.classList.contains('dark')) {
-            document.querySelector('#theme-toggle span').textContent = '☀️';
-        }
-
-        // Media upload handling
         function previewMedia(event) {
-            const file = event.target.files[0];
+            const file = event.target.files?.[0];
             if (!file) return;
 
-            const mediaInput = document.getElementById('media');
-            const mediaDropZone = document.getElementById('media-drop-zone');
             const mediaPlaceholder = document.getElementById('media-placeholder');
             const mediaPreview = document.getElementById('media-preview');
             const previewImg = document.getElementById('preview-img');
             const previewVideo = document.getElementById('preview-video');
             const mediaFilename = document.getElementById('media-filename');
 
+            // Reset
             previewImg.classList.add('hidden');
             previewVideo.classList.add('hidden');
+            previewVideo.pause();
+            previewVideo.src = '';
+
+            const objectUrl = URL.createObjectURL(file);
 
             if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    previewImg.src = e.target.result;
-                    previewImg.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
+                previewImg.src = objectUrl;
+                previewImg.classList.remove('hidden');
             } else if (file.type.startsWith('video/')) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    previewVideo.src = e.target.result;
-                    previewVideo.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
+                previewVideo.src = objectUrl;
+                previewVideo.classList.remove('hidden');
+                previewVideo.load();
             }
 
-            mediaFilename.textContent = file.name + ' (' + (file.size / 1024 / 1024).toFixed(2) + ' MB)';
+            mediaFilename.textContent =
+                `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+
             mediaPlaceholder.classList.add('hidden');
             mediaPreview.classList.remove('hidden');
         }
 
         function clearMedia() {
-            const mediaInput = document.getElementById('media');
-            const mediaPlaceholder = document.getElementById('media-placeholder');
-            const mediaPreview = document.getElementById('media-preview');
-
             mediaInput.value = '';
-            mediaPlaceholder.classList.remove('hidden');
-            mediaPreview.classList.add('hidden');
+
+            document.getElementById('preview-img').classList.add('hidden');
+            document.getElementById('preview-video').classList.add('hidden');
+
+            document.getElementById('media-placeholder').classList.remove('hidden');
+            document.getElementById('media-preview').classList.add('hidden');
         }
 
-        // Drag and drop support
-        const mediaDropZone = document.getElementById('media-drop-zone');
-        const mediaInput = document.getElementById('media');
+        // CLICK TO OPEN FILE PICKER
+        mediaDropZone?.addEventListener('click', () => {
+            mediaInput.click();
+        });
 
-        if (mediaDropZone) {
-            mediaDropZone.addEventListener('click', () => mediaInput.click());
+        // DRAG & DROP (DESKTOP SAJA)
+        const isTouchDevice =
+            'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+        if (!isTouchDevice && mediaDropZone) {
             mediaDropZone.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 mediaDropZone.classList.add('bg-slate-100', 'dark:bg-slate-800/80');
@@ -246,12 +240,11 @@
             mediaDropZone.addEventListener('drop', (e) => {
                 e.preventDefault();
                 mediaDropZone.classList.remove('bg-slate-100', 'dark:bg-slate-800/80');
+
                 if (e.dataTransfer.files.length) {
                     mediaInput.files = e.dataTransfer.files;
                     previewMedia({
-                        target: {
-                            files: e.dataTransfer.files
-                        }
+                        target: mediaInput
                     });
                 }
             });

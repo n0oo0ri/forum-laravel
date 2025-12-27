@@ -31,13 +31,29 @@
 <body class="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
     <!-- Header -->
     <header
-        class="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 transition-colors sticky top-0 z-50">
-        <div class="max-w-3xl mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
+        class="sticky top-0 z-50 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 transition-colors">
+        <div class="w-full px-6 py-3">
+            <div class="flex items-center justify-between">
+                <!-- LEFT: Logo -->
                 <a href="{{ route('home') }}" class="text-2xl font-bold">Forum</a>
-                <button id="theme-toggle"
-                    class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                    <span class="text-2xl">🌙</span>
+
+                <!-- THEME TOGGLE (SVG) -->
+                <button id="theme-toggle" aria-label="Toggle dark mode"
+                    class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <!-- Moon -->
+                    <svg class="w-5 h-5 text-slate-700 dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+                    </svg>
+
+                    <!-- Sun -->
+                    <svg class="w-5 h-5 text-yellow-400 hidden dark:block" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 1v2m0 18v2m11-11h-2M3 12H1 m16.95 6.95l-1.414-1.414M6.464 6.464L5.05 5.05 m12.9 0l-1.414 1.414M6.464 17.536L5.05 18.95" />
+                    </svg>
                 </button>
             </div>
         </div>

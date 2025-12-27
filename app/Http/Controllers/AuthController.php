@@ -45,10 +45,18 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^\S+$/'
+            ],
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
+        ], [
+            'name.regex' => 'Nama tidak boleh mengandung spasi.',
         ]);
+
 
         $user = User::create([
             'name' => $validated['name'],

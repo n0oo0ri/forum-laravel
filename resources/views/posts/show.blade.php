@@ -36,23 +36,23 @@
            bg-white dark:bg-slate-900
            transition-colors">
 
-        <div class="w-full px-6 py-3"> {{-- ⬅️ py-3 (SAMA DENGAN WELCOME) --}}
+        <div class="w-full px-4 sm:px-6 py-3">
             <div class="flex items-center justify-between">
 
                 <!-- LEFT -->
-                <a href="{{ route('home') }}" class="text-2xl font-bold"> {{-- ⬅️ text-xl --}}
+                <a href="{{ route('home') }}" class="text-xl sm:text-2xl font-bold">
                     Forum
                 </a>
 
                 <!-- RIGHT -->
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3 sm:gap-4">
 
                     @auth
                         <a href="{{ route('users.profile', auth()->user()) }}" class="flex items-center gap-2">
 
                             @if (auth()->user()->avatar)
                                 <img src="{{ asset('storage/' . auth()->user()->avatar) }}"
-                                    class="w-8 h-8 rounded-full object-cover"> {{-- ⬅️ w-7 h-7 --}}
+                                    class="w-8 h-8 rounded-full object-cover">
                             @else
                                 <div
                                     class="w-8 h-8 rounded-full
@@ -63,12 +63,14 @@
                                 </div>
                             @endif
 
-                            <span class="text-sm text-slate-600 dark:text-slate-400">
+                            <!-- Nama hanya tampil di ≥ sm -->
+                            <span class="hidden sm:inline text-sm text-slate-600 dark:text-slate-400">
                                 {{ auth()->user()->name }}
                             </span>
                         </a>
 
-                        <form method="POST" action="{{ route('logout') }}">
+                        <!-- Logout disembunyikan di mobile -->
+                        <form method="POST" action="{{ route('logout') }}" class="hidden sm:block">
                             @csrf
                             <button class="text-sm font-semibold hover:underline">
                                 Keluar
@@ -80,7 +82,7 @@
                         </a>
                     @endauth
 
-                    <!-- THEME TOGGLE (SVG) -->
+                    <!-- THEME TOGGLE -->
                     <button id="theme-toggle" aria-label="Toggle dark mode"
                         class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800
                            hover:bg-slate-200 dark:hover:bg-slate-700
@@ -89,7 +91,7 @@
                         <svg class="w-5 h-5 text-slate-700 dark:hidden" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3
-                               7 7 0 0021 12.79z" />
+                                 7 7 0 0021 12.79z" />
                         </svg>
 
                         <!-- Sun -->
@@ -97,8 +99,8 @@
                             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="5" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2m11-11h-2M3 12H1
-                               m16.95 6.95l-1.414-1.414M6.464 6.464L5.05 5.05
-                               m12.9 0l-1.414 1.414M6.464 17.536L5.05 18.95" />
+                                 m16.95 6.95l-1.414-1.414M6.464 6.464L5.05 5.05
+                                 m12.9 0l-1.414 1.414M6.464 17.536L5.05 18.95" />
                         </svg>
                     </button>
                 </div>
@@ -106,9 +108,7 @@
         </div>
     </header>
 
-
-
-
+    <!-- Main Content -->
     <main class="max-w-3xl mx-auto px-6 py-8">
         <!-- Back Button -->
         <a href="{{ route('home') }}"
@@ -134,8 +134,9 @@
                                 title="Edit">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5
-                                         m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5
+                                                             m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                             </a>
 
@@ -155,8 +156,8 @@
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                         stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862
-                                             a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6
-                                             m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                 a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6
+                                                                 m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                     </svg>
                                 </button>
                             </form>
@@ -341,14 +342,12 @@
             } else if (type === 'video') {
                 videoSource.src = src;
                 video.load();
-                // PENTING: Remove hidden SEBELUM play
                 video.classList.remove('hidden');
 
-                // Tunggu video ready sebelum play
-                video.addEventListener('loadeddata', function playOnce() {
+                // autoplay tanpa event listener
+                setTimeout(() => {
                     video.play().catch(err => console.error('Video play error:', err));
-                    video.removeEventListener('loadeddata', playOnce);
-                });
+                }, 50);
             }
 
             // Show modal dengan transition
@@ -363,12 +362,15 @@
         function closeLightbox() {
             const modal = document.getElementById('lightboxModal');
             const video = document.getElementById('lightboxVideo');
+            const videoSource = video.querySelector('source');
 
             modal.classList.add('opacity-0', 'pointer-events-none');
             setTimeout(() => {
                 modal.style.display = 'none';
                 video.pause();
-                video.src = '';
+                if (videoSource) {
+                    videoSource.src = '';
+                }
             }, 300);
 
             document.body.style.overflow = 'auto';
@@ -447,6 +449,50 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        // Toggle reply form
+        function toggleReplyForm(commentId) {
+            const form = document.getElementById(`reply-form-${commentId}`);
+            if (form) {
+                form.classList.toggle('hidden');
+                const textarea = form.querySelector('textarea');
+                if (!form.classList.contains('hidden')) {
+                    textarea?.focus();
+                    // Auto-fill mention if textarea is empty
+                    const mention = textarea?.dataset.mention;
+                    if (mention && !textarea.value.trim()) {
+                        textarea.value = `@${mention} `;
+                    }
+                }
+            }
+        }
+
+        // Delete comment
+        function deleteComment(commentId) {
+            if (!confirm('Yakin ingin menghapus komentar ini?')) return;
+
+            const token = document.querySelector('input[name="_token"]').value;
+
+            fetch(`/comments/${commentId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': token,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error('Gagal menghapus');
+                    // Refresh halaman atau remove element
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Gagal menghapus komentar');
+                });
+        }
     </script>
 
     <script>

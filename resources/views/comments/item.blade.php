@@ -16,7 +16,13 @@
         @endauth
     </div>
 
-    <p class="text-slate-700 dark:text-slate-300 mb-4">{{ $comment->body }}</p>
+    <p class="text-slate-700 dark:text-slate-300 mb-4">
+        {!! preg_replace(
+            '/@(\w+)/',
+            '<span class="text-blue-600 dark:text-blue-400 font-semibold">@$1</span>',
+            e($comment->body),
+        ) !!}
+    </p>
 
     <div class="flex gap-4">
         @auth
@@ -40,7 +46,8 @@
                 @csrf
                 <input type="hidden" name="parent_id" value="{{ $comment->id }}">
                 <textarea name="body" placeholder="Balas komentar..." required
-                    class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-100 mb-3 min-h-20"></textarea>
+                    class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-100 mb-3 min-h-20"
+                    data-mention="{{ $comment->user->name }}"></textarea>
                 <div class="flex gap-2">
                     <button type="submit"
                         class="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-2 rounded text-sm font-semibold hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors">
@@ -57,9 +64,9 @@
 
     <!-- Replies -->
     @if ($comment->replies->count() > 0)
-        <div class="mt-4 ml-6 pl-4 border-l-2 border-slate-200 dark:border-slate-700 space-y-3">
+        <div class="mt-4 ml-6 pl-4 border-l-2 border-slate-300 dark:border-slate-600 space-y-3">
             @foreach ($comment->replies()->with('user')->oldest()->get() as $reply)
-                @include('comments.reply-item', ['comment' => $reply])
+                @include('comments.reply-item', ['comment' => $reply, 'post' => $post])
             @endforeach
         </div>
     @endif

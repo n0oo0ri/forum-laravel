@@ -80,8 +80,15 @@
                 <div>
                     <label for="name" class="block text-sm font-medium mb-2">Nama</label>
                     <input type="text" name="name" id="name" required value="{{ old('name') }}"
-                        class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-100"
-                        placeholder="Nama Anda">
+                        placeholder="Nama Anda (tanpa spasi)"
+                        class="w-full px-4 py-2
+           border border-slate-300 dark:border-slate-600
+           rounded-lg dark:bg-slate-800 dark:text-white
+           focus:outline-none focus:ring-2
+           focus:ring-slate-900 dark:focus:ring-slate-100"
+                        onkeydown="if (event.key === ' ') event.preventDefault();"
+                        oninput="this.value = this.value.replace(/\s+/g, '')">
+
                 </div>
 
                 <div>

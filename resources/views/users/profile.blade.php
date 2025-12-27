@@ -103,6 +103,7 @@
 
     <!-- Main Content -->
     <main class="max-w-3xl mx-auto px-6 py-8">
+
         <!-- Back Button -->
         <a href="{{ route('home') }}"
             class="inline-block mb-6 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors">
@@ -110,100 +111,177 @@
         </a>
 
         <!-- Profile Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-8 mb-8">
-            <div class="flex items-start justify-between mb-6">
-                <div class="flex items-start gap-6">
+        <div class="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-5 sm:p-8 mb-8">
+
+            <!-- HEADER -->
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 mb-6">
+
+                <!-- PROFILE INFO -->
+                <div
+                    class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 text-center sm:text-left">
+
                     @if ($user->avatar)
                         <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}"
-                            class="w-24 h-24 rounded-full object-cover">
+                            class="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover">
                     @else
                         <div
-                            class="w-24 h-24 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-4xl">
-                            👤</div>
+                            class="w-20 h-20 sm:w-24 sm:h-24 rounded-full
+                           bg-slate-200 dark:bg-slate-700
+                           flex items-center justify-center">
+                            <!-- User Icon -->
+                            <svg class="w-8 h-8 text-slate-500 dark:text-slate-300" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 14a4 4 0 01-8 0
+                                 m8 0a4 4 0 00-8 0
+                                 m8 0v1a2 2 0 01-2 2H10a2 2 0 01-2-2v-1
+                                 m6-6a4 4 0 10-8 0 4 4 0 008 0z" />
+                            </svg>
+                        </div>
                     @endif
+
                     <div>
-                        <h1 class="text-4xl font-bold mb-2">{{ $user->name }}</h1>
-                        <p class="text-slate-600 dark:text-slate-400">{{ $user->email }}</p>
+                        <h1 class="text-2xl sm:text-4xl font-bold mb-1 sm:mb-2">
+                            {{ $user->name }}
+                        </h1>
+
+                        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+                            {{ $user->email }}
+                        </p>
+
                         @if ($user->location)
-                            <p class="text-slate-600 dark:text-slate-400">📍 {{ $user->location }}</p>
-                        @endif
-                        @if ($user->website)
-                            <p class="text-slate-600 dark:text-slate-400">
-                                🔗 <a href="{{ $user->website }}" target="_blank"
-                                    class="text-blue-600 dark:text-blue-400 hover:underline">{{ $user->website }}</a>
+                            <p
+                                class="text-sm text-slate-600 dark:text-slate-400 flex items-center gap-1 justify-center sm:justify-start">
+                                <!-- Location Icon -->
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 11a3 3 0 100-6 3 3 0 000 6z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 11c0 7-7.5 11-7.5 11S4.5 18 4.5 11
+                                     a7.5 7.5 0 1115 0z" />
+                                </svg>
+                                {{ $user->location }}
                             </p>
                         @endif
-                        <p class="text-slate-500 dark:text-slate-500 text-sm mt-2">
+
+                        @if ($user->website)
+                            <p
+                                class="text-sm text-slate-600 dark:text-slate-400 flex items-center gap-1 justify-center sm:justify-start">
+                                <!-- Link Icon -->
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 13a5 5 0 007.07 0l1.41-1.41
+                                     a5 5 0 00-7.07-7.07L10 5" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 11a5 5 0 01-7.07 0L5.5 9.59
+                                     a5 5 0 017.07-7.07L14 7" />
+                                </svg>
+                                <a href="{{ $user->website }}" target="_blank"
+                                    class="text-blue-600 dark:text-blue-400 hover:underline break-all">
+                                    {{ $user->website }}
+                                </a>
+                            </p>
+                        @endif
+
+                        <p class="text-xs sm:text-sm text-slate-500 mt-2">
                             Bergabung {{ $user->created_at->diffForHumans() }}
                         </p>
                     </div>
                 </div>
+
+                <!-- ACTION BUTTONS -->
                 @auth
                     @if (Auth::id() === $user->id)
-                        <div class="flex items-center gap-3">
-                            <!-- Edit Profil -->
+                        <div class="flex justify-center sm:justify-end gap-3">
+
+                            <!-- Edit -->
                             <a href="{{ route('users.edit') }}" title="Edit Profil"
-                                class="p-2 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-all">
+                                class="p-2 rounded-lg bg-blue-50 hover:bg-blue-100
+                              dark:bg-blue-900/20 dark:hover:bg-blue-900/40
+                              text-blue-600 dark:text-blue-400 transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5 m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11
+                                                                 a2 2 0 002-2v-5
+                                                                 m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828z" />
                                 </svg>
                             </a>
 
                             <!-- Print -->
                             <button onclick="window.print()" title="Cetak Profil"
-                                class="p-2 rounded-lg bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/40 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all">
+                                class="p-2 rounded-lg bg-green-50 hover:bg-green-100
+                               dark:bg-green-900/20 dark:hover:bg-green-900/40
+                               text-green-600 dark:text-green-400 transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2 M6 14h12v8H6z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5
+                                                                 a2 2 0 012-2h16a2 2 0 012 2v5
+                                                                 a2 2 0 01-2 2h-2
+                                                                 M6 14h12v8H6z" />
                                 </svg>
                             </button>
 
-                            <!-- Export Excel -->
+                            <!-- Export -->
                             <button onclick="exportToExcel()" title="Export Excel"
-                                class="p-2 rounded-lg bg-orange-50 hover:bg-orange-100 dark:bg-orange-900/20 dark:hover:bg-orange-900/40 text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-all">
+                                class="p-2 rounded-lg bg-orange-50 hover:bg-orange-100
+                               dark:bg-orange-900/20 dark:hover:bg-orange-900/40
+                               text-orange-600 dark:text-orange-400 transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M9 17v-6m6 6v-4m3 8H6a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6m6 6v-4
+                                                                 m3 8H6a2 2 0 01-2-2V5
+                                                                 a2 2 0 012-2h7l5 5v11
+                                                                 a2 2 0 01-2 2z" />
                                 </svg>
                             </button>
+
+                            <!-- Logout -->
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" title="Keluar" aria-label="Keluar"
+                                    class="p-2 rounded-lg
+               bg-red-50 hover:bg-red-100
+               dark:bg-red-900/20 dark:hover:bg-red-900/40
+               text-red-600 dark:text-red-400
+               transition">
+                                    <!-- Logout Icon -->
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 12H3m0 0l4-4m-4 4l4 4" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0" />
+                                    </svg>
+                                </button>
+                            </form>
+
                         </div>
                     @endif
                 @endauth
             </div>
 
-            @if ($user->bio)
-                <div class="mb-6 pb-6 border-b border-slate-200 dark:border-slate-700">
-                    <p class="text-slate-700 dark:text-slate-300">{{ $user->bio }}</p>
-                </div>
-            @endif
-
-            <!-- Stats -->
-            <div class="grid grid-cols-3 gap-4">
-                <!-- Posts -->
+            <!-- STATS -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <div
-                    class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-center">
-                    <p class="text-xl font-semibold">{{ $totalPosts }}</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Postingan</p>
+                    class="rounded-lg border border-slate-200 dark:border-slate-800
+                    bg-white dark:bg-slate-900 px-4 py-3 text-center">
+                    <p class="text-lg sm:text-xl font-semibold">{{ $totalPosts }}</p>
+                    <p class="text-xs text-slate-500">Postingan</p>
                 </div>
 
-                <!-- Comments -->
                 <div
-                    class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-center">
-                    <p class="text-xl font-semibold">{{ $totalComments }}</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Komentar</p>
+                    class="rounded-lg border border-slate-200 dark:border-slate-800
+                    bg-white dark:bg-slate-900 px-4 py-3 text-center">
+                    <p class="text-lg sm:text-xl font-semibold">{{ $totalComments }}</p>
+                    <p class="text-xs text-slate-500">Komentar</p>
                 </div>
 
-                <!-- Votes -->
                 <div
-                    class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-center">
+                    class="rounded-lg border border-slate-200 dark:border-slate-800
+                    bg-white dark:bg-slate-900 px-4 py-3 text-center col-span-2 sm:col-span-1">
                     <p id="karma-count"
-                        class="text-xl font-semibold {{ $totalVotes >= 0 ? 'text-orange-500' : 'text-blue-500' }}">
-                        {{ $totalVotes }}</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Karma</p>
+                        class="text-lg sm:text-xl font-semibold
+                {{ $totalVotes >= 0 ? 'text-orange-500' : 'text-blue-500' }}">
+                        {{ $totalVotes }}
+                    </p>
+                    <p class="text-xs text-slate-500">Karma</p>
                 </div>
             </div>
         </div>

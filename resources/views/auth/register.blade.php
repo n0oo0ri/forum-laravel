@@ -113,6 +113,20 @@
                         placeholder="••••••••">
                 </div>
 
+                <div>
+                    <label for="province" class="block text-sm font-medium mb-2">Provinsi</label>
+                    <input type="text" name="province" id="province" value="{{ old('province') }}"
+                        placeholder="Contoh: Jawa Barat"
+                        class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-100">
+                </div>
+
+                <div>
+                    <label for="district" class="block text-sm font-medium mb-2">Kabupaten/Kota</label>
+                    <input type="text" name="district" id="district" value="{{ old('district') }}"
+                        placeholder="Contoh: Bandung"
+                        class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-100">
+                </div>
+
                 <button type="submit"
                     class="w-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 py-2 rounded-lg font-semibold hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors mt-6">
                     Daftar

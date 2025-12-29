@@ -18,6 +18,8 @@ class User extends Authenticatable
         'avatar',
         'location',
         'website',
+        'province',
+        'district',
     ];
 
     protected $hidden = [

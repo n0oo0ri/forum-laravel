@@ -197,19 +197,6 @@
                     @enderror
                 </div>
 
-                <!-- Lokasi -->
-                <div>
-                    <label for="location" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                        Lokasi (Opsional)
-                    </label>
-                    <input type="text" id="location" name="location"
-                        value="{{ old('location', $user->location) }}" placeholder="Kota atau negara Anda..."
-                        class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    @error('location')
-                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                    @enderror
-                </div>
-
                 <!-- Website -->
                 <div>
                     <label for="website" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">

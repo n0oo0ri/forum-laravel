@@ -57,7 +57,6 @@ class UserController extends Controller
     ],
             'email' => 'required|email|unique:users,email,' . $user->id,
             'bio' => 'nullable|string|max:500',
-            'location' => 'nullable|string|max:255',
             'website' => 'nullable|url|max:255',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
@@ -66,7 +65,6 @@ class UserController extends Controller
             'email.email' => 'Format email tidak valid',
             'email.unique' => 'Email sudah terdaftar',
             'bio.max' => 'Bio maksimal 500 karakter',
-            'location.max' => 'Lokasi maksimal 255 karakter',
             'website.url' => 'URL website tidak valid',
             'avatar.image' => 'File harus berupa gambar',
             'avatar.mimes' => 'Format gambar harus JPEG, PNG, JPG, atau GIF',

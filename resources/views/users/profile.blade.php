@@ -148,7 +148,23 @@
                             {{ $user->email }}
                         </p>
 
-                        @if ($user->location)
+                        @php
+                            $locationDisplay = null;
+                            if ($user->location) {
+                                $locationDisplay = $user->location;
+                            } else {
+                                $parts = [];
+                                if ($user->district) {
+                                    $parts[] = $user->district;
+                                }
+                                if ($user->province) {
+                                    $parts[] = $user->province;
+                                }
+                                $locationDisplay = implode(', ', $parts) ?: null;
+                            }
+                        @endphp
+
+                        @if ($locationDisplay)
                             <p
                                 class="text-sm text-slate-600 dark:text-slate-400 flex items-center gap-1 justify-center sm:justify-start">
                                 <!-- Location Icon -->
@@ -159,7 +175,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 11c0 7-7.5 11-7.5 11S4.5 18 4.5 11
                                      a7.5 7.5 0 1115 0z" />
                                 </svg>
-                                {{ $user->location }}
+                                {{ $locationDisplay }}
                             </p>
                         @endif
 
@@ -199,9 +215,10 @@
                               text-blue-600 dark:text-blue-400 transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11
-                                                                 a2 2 0 002-2v-5
-                                                                 m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11
+                                                                                     a2 2 0 002-2v-5
+                                                                                     m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828z" />
                                 </svg>
                             </a>
 
@@ -213,9 +230,9 @@
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5
-                                                                 a2 2 0 012-2h16a2 2 0 012 2v5
-                                                                 a2 2 0 01-2 2h-2
-                                                                 M6 14h12v8H6z" />
+                                                                                     a2 2 0 012-2h16a2 2 0 012 2v5
+                                                                                     a2 2 0 01-2 2h-2
+                                                                                     M6 14h12v8H6z" />
                                 </svg>
                             </button>
 
@@ -227,9 +244,9 @@
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6m6 6v-4
-                                                                 m3 8H6a2 2 0 01-2-2V5
-                                                                 a2 2 0 012-2h7l5 5v11
-                                                                 a2 2 0 01-2 2z" />
+                                                                                     m3 8H6a2 2 0 01-2-2V5
+                                                                                     a2 2 0 012-2h7l5 5v11
+                                                                                     a2 2 0 01-2 2z" />
                                 </svg>
                             </button>
 
@@ -525,6 +542,13 @@
                     ['Email', '{{ $user->email }}'],
                     @if ($user->location)
                         ['Lokasi', '{{ $user->location }}'],
+                    @else
+                        @if ($user->district)
+                            ['Kabupaten/Kota', '{{ $user->district }}'],
+                        @endif
+                        @if ($user->province)
+                            ['Provinsi', '{{ $user->province }}'],
+                        @endif
                     @endif
                     @if ($user->website)
                         ['Website', '{{ $user->website }}'],
@@ -568,11 +592,11 @@
                     }, // Merge A1:B1
                     {
                         s: {
-                            r: 7,
+                            r: 9,
                             c: 0
                         },
                         e: {
-                            r: 7,
+                            r: 9,
                             c: 1
                         }
                     } // Merge untuk "Statistik"

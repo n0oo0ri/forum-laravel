@@ -53,6 +53,8 @@ class AuthController extends Controller
             ],
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
+            'province' => 'nullable|string|max:255',
+            'district' => 'nullable|string|max:255',
         ], [
             'name.regex' => 'Nama tidak boleh mengandung spasi.',
         ]);
@@ -62,6 +64,8 @@ class AuthController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'province' => $validated['province'] ?? null,
+            'district' => $validated['district'] ?? null,
         ]);
 
         Auth::login($user);
